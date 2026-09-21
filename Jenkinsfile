@@ -55,7 +55,7 @@ pipeline {
         }
 
         // 4. Build and push Docker image
-        stage('Build &amp; Push Docker Image') {
+        stage('Build & Push Docker Image') {
             steps {
                 script {
                     echo 'Building Docker Image...'
@@ -71,10 +71,6 @@ pipeline {
     }
 
     post {
-        always {
-            echo 'Final cleaning up and generating report...'
-            archiveArtifacts artifacts: 'package*.json', allowEmptyArchive: true
-        }
         success {
             echo 'Pipeline build sussessful.'
         }
