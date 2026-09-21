@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:16'
-        }
-    }
+    agent none
 
     environment {
         DOCKER_HUB_USER = 'ocefall1n1'
