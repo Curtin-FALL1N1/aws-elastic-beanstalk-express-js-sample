@@ -18,7 +18,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing Node.js Dependencies...'
-                sh 'npm install'
+                script { docker.image('node:16').inside { sh 'npm install' }
             }
         }
 
@@ -26,7 +26,7 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 echo 'Running Unit Tests'
-                sh 'npm test || echo "No unit tests specified in package.json, skipping exit failure."'
+                script { docker.image('node:16').inside {sh 'npm test || echo "No unit tests specified in package.json, skipping exit failure."'}
             }
         }
 
@@ -35,16 +35,18 @@ pipeline {
             steps {
                 echo 'Scaning Vulnerability with npm audit...'
                 script {
-                    // Vulnerability Verification
-                    def auditExitCode = sh(
-                        script: 'npm audit --audit-level=high',
-                        returnStatus: true
-                    )
+                    docker.image('node:16').inside {
+                         // Vulnerability Verification
+                        def auditExitCode = sh(
+                            script: 'npm audit --audit-level=high',
+                            returnStatus: true
+                        )
                     
                     if (auditExitCode != 0) {
                         error("[Security Gate] Found High or Critical levels of Vulnerability. Pipeline stopped.")
                     } else {
                         echo 'Security scan passed.'
+                         }
                     }
                 }
             }
