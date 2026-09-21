@@ -18,7 +18,11 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing Node.js Dependencies...'
-                script { docker.image('node:16').inside { sh 'npm install' }
+                script {
+                    docker.image('node:16').inside {
+                        sh 'npm install'
+                    }
+                }
             }
         }
 
@@ -26,7 +30,11 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 echo 'Running Unit Tests'
-                script { docker.image('node:16').inside {sh 'npm test || echo "No unit tests specified in package.json, skipping exit failure."'}
+                script {
+                    docker.image('node:16').inside {
+                        sh 'npm test || echo "No unit tests specified in package.json, skipping exit failure."'
+                    }
+                }
             }
         }
 
@@ -42,18 +50,18 @@ pipeline {
                             returnStatus: true
                         )
                     
-                    if (auditExitCode != 0) {
-                        error("[Security Gate] Found High or Critical levels of Vulnerability. Pipeline stopped.")
-                    } else {
-                        echo 'Security scan passed.'
-                         }
+                        if (auditExitCode != 0) {
+                            error("[Security Gate] Found High or Critical levels of Vulnerability. Pipeline stopped.")
+                        } else {
+                            echo 'Security scan passed.'
+                        }
                     }
                 }
             }
         }
 
         // 4. Build and push Docker image
-        stage('Build & Push Docker Image') {
+        stage('Build &amp; Push Docker Image') {
             steps {
                 script {
                     echo 'Building Docker Image...'
