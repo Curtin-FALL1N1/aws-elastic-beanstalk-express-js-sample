@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any
 
     environment {
         DOCKER_HUB_USER = 'ocefall1n1'
